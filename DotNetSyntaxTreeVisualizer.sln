@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationTestReact", "WebApplicationTestReact\WebApplicationTestReact.csproj", "{3EE110F1-13B2-46A9-88C8-25C0FCD6C3A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetSyntaxTreeVisualizer", "DotNetSyntaxTreeVisualizer\DotNetSyntaxTreeVisualizer.csproj", "{3EE110F1-13B2-46A9-88C8-25C0FCD6C3A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
