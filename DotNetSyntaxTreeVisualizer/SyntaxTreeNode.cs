@@ -9,11 +9,11 @@ namespace DotNetSyntaxTreeVisualizer
     {
         public string Name { get; }
 
-        public IDictionary<string, string> Attributes { get; }
+        public IDictionary<string, string> Properties { get; }
         public IList<SyntaxTreeNode> Children { get; } = new List<SyntaxTreeNode>();
 
-        public SyntaxTreeNode(IDictionary<string, string> attributes) =>
-            (Attributes, Name) = (attributes, attributes.Values.First());
+        public SyntaxTreeNode(IDictionary<string, string> properties) =>
+            (Properties, Name) = (properties, properties.Values.First());
 
         public void AddChild(SyntaxTreeNode child)
         {
@@ -22,7 +22,7 @@ namespace DotNetSyntaxTreeVisualizer
 
         public override string ToString()
         {
-            return Attributes.Values.First();
+            return Properties.Values.First();
         }
     }
 }
