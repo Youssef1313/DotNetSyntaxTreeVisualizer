@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Extensions.Logging;
 
-namespace WebApplicationTestReact.Controllers
+namespace DotNetSyntaxTreeVisualizer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
