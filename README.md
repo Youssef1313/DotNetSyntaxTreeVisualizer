@@ -2,7 +2,7 @@
 
 .NET Syntax Tree Visualizer, A C# ASP.NET Core app with ReactJS in front-end that shows Roslyn's syntax tree for a given source code.
 
-**Note:** This web app hasn't been deployed yet.
+The app is deployed [here](https://dotnetsyntaxtreevisualizer.azurewebsites.net/).
 
 ## Visual Studio already has a graph visualizer
 
