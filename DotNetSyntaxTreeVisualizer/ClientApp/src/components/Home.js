@@ -47,7 +47,9 @@ export class Home extends Component {
             <React.Fragment>
                 <textarea defaultValue={helloWorldCode} onChange={this.handleChanged} style={{ height: '230px', width: '100%' }} />
                 <div id="treeWrapper" style={containerStyles} ref={tc => (this.treeContainer = tc)}>
-                    <Tree data={this.state.treeJson} orientation="vertical" translate={this.state.translate} pathFunc="straight" />
+                    <Tree data={this.state.treeJson} orientation="vertical"
+                        translate={this.state.translate} pathFunc="straight" transitionDuration={0}
+                        nodeSvgShape={{ shape: "none" }} textLayout={{textAnchor: "middle"}}/>
                 </div>
             </React.Fragment>
         );
