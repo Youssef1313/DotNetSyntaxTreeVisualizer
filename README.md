@@ -16,3 +16,16 @@ That's true. But not all developers work on Visual Studio. Some developers might
 ## Screenshot
 
 ![image](https://user-images.githubusercontent.com/31348972/85202525-31363300-b307-11ea-8b96-2d44fc742bf4.png)
+
+## Features
+
+### Current features
+
+- Collapsing and expanding a node.
+- Zooming
+
+### TODO
+
+- Support Visual Basic [#6](https://github.com/Youssef1313/DotNetSyntaxTreeVisualizer/issues/6).
+- Allow sharing snippets [#9](https://github.com/Youssef1313/DotNetSyntaxTreeVisualizer/issues/9).
+- Add Syntax Highlighting [#4](https://github.com/Youssef1313/DotNetSyntaxTreeVisualizer/issues/4).
