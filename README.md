@@ -6,7 +6,7 @@ The app is deployed [here](https://dotnetsyntaxtreevisualizer.azurewebsites.net/
 
 ## Visual Studio already has a graph visualizer
 
-That's true. But not all developers work on Visual Studio. Some developers might be using Rider, VS Code, or whatever.
+That's true. But not all developers work on Visual Studio. Some developers might be using Rider, VS Code, or whatever. Or you might just be lazy to open Visual Studio!
 
 ## Why to inspect a syntax tree
 
