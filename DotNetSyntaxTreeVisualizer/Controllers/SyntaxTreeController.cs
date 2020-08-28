@@ -28,8 +28,11 @@ namespace DotNetSyntaxTreeVisualizer.Controllers
         {
             using var reader = new StreamReader(Request.Body, Encoding.UTF8);
             string body = await reader.ReadToEndAsync().ConfigureAwait(false);
-            SyntaxNode root = await CSharpSyntaxTree.ParseText(body).GetRootAsync(cancellationToken).ConfigureAwait(false);
-            SyntaxTreeNode myRoot = SyntaxTreeNode.CreateMyOwnTree(root);
+            SyntaxTree tree = CSharpSyntaxTree.ParseText(body);
+            SyntaxNode root = await tree.GetRootAsync(cancellationToken).ConfigureAwait(false);
+            Compilation compilation = CSharpCompilation.Create("HelloWorld", new[] { tree });
+            SemanticModel model = compilation.GetSemanticModel(tree);
+            SyntaxTreeNode myRoot = SyntaxTreeNode.CreateMyOwnTree(root, model);
             return myRoot;
         }
     }

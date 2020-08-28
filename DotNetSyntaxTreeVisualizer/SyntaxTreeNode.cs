@@ -22,17 +22,17 @@ namespace DotNetSyntaxTreeVisualizer
             Children.Add(child);
         }
 
-        public static SyntaxTreeNode CreateMyOwnTree(SyntaxNodeOrToken nodeOrToken)
+        public static SyntaxTreeNode CreateMyOwnTree(SyntaxNodeOrToken nodeOrToken, SemanticModel model)
         {
-            var root = new SyntaxTreeNode(GetSyntaxInformation(nodeOrToken));
+            var root = new SyntaxTreeNode(GetSyntaxInformation(nodeOrToken, model));
             foreach (SyntaxNodeOrToken child in nodeOrToken.ChildNodesAndTokens())
             {
-                root.AddChild(CreateMyOwnTree(child));
+                root.AddChild(CreateMyOwnTree(child, model));
             }
             return root;
         }
 
-        private static IDictionary<string, string> GetSyntaxInformation(SyntaxNodeOrToken syntax)
+        private static IDictionary<string, string> GetSyntaxInformation(SyntaxNodeOrToken syntax, SemanticModel model)
         {
             Func<SyntaxNodeOrToken, Microsoft.CodeAnalysis.CSharp.SyntaxKind> csharpKind = Microsoft.CodeAnalysis.CSharp.CSharpExtensions.Kind;
             Func<SyntaxNodeOrToken, Microsoft.CodeAnalysis.VisualBasic.SyntaxKind> vbKind = Microsoft.CodeAnalysis.VisualBasic.VisualBasicExtensions.Kind;
@@ -43,8 +43,14 @@ namespace DotNetSyntaxTreeVisualizer
 
             var result = new Dictionary<string, string>
             {
-                { "Kind", kind }
+                { "Kind", kind },
             };
+
+            IOperation operation = model.GetOperation(syntax.AsNode());
+            if (operation is object)
+            {
+                result.Add(nameof(IOperation), operation.Kind.ToString());
+            }
 
             PropertyInfo[] properties = syntax.GetType().GetProperties();
             foreach (PropertyInfo info in properties)
