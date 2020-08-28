@@ -1,7 +1,8 @@
-using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Microsoft.CodeAnalysis;
 
 namespace DotNetSyntaxTreeVisualizer
 {
@@ -23,7 +24,7 @@ namespace DotNetSyntaxTreeVisualizer
 
         public static SyntaxTreeNode CreateMyOwnTree(SyntaxNodeOrToken nodeOrToken)
         {
-            var root = new SyntaxTreeNode(GetSyntaxNodeOrTokenInformation(nodeOrToken));
+            var root = new SyntaxTreeNode(GetSyntaxInformation(nodeOrToken));
             foreach (SyntaxNodeOrToken child in nodeOrToken.ChildNodesAndTokens())
             {
                 root.AddChild(CreateMyOwnTree(child));
@@ -31,28 +32,20 @@ namespace DotNetSyntaxTreeVisualizer
             return root;
         }
 
-        private static IDictionary<string, string> GetSyntaxNodeOrTokenInformation(SyntaxNodeOrToken nodeOrToken)
+        private static IDictionary<string, string> GetSyntaxInformation(SyntaxNodeOrToken syntax)
         {
-            return nodeOrToken.IsNode
-                ? GetSyntaxInformation(nodeOrToken.AsNode())
-                : GetSyntaxInformation(nodeOrToken.AsToken());
-        }
+            Func<SyntaxNodeOrToken, Microsoft.CodeAnalysis.CSharp.SyntaxKind> csharpKind = Microsoft.CodeAnalysis.CSharp.CSharpExtensions.Kind;
+            Func<SyntaxNodeOrToken, Microsoft.CodeAnalysis.VisualBasic.SyntaxKind> vbKind = Microsoft.CodeAnalysis.VisualBasic.VisualBasicExtensions.Kind;
+            string kind =
+                syntax.Language == LanguageNames.CSharp
+                ? csharpKind(syntax).ToString()
+                : vbKind(syntax).ToString();
 
-        private static IDictionary<string, string> GetSyntaxInformation<T>(T syntax)
-        {
-            var result = new Dictionary<string, string>();
-            if (syntax is SyntaxNode node)
+            var result = new Dictionary<string, string>
             {
-                result.Add("NodeKind", node.Kind().ToString()); // TODO: Kind() here is for C#. Considering fixing that.
-            }
-            else if (syntax is SyntaxToken token)
-            {
-                result.Add("TokenKind", token.Kind().ToString());
-            }
-            else
-            {
-                throw new ArgumentException($"The specified {nameof(syntax)} is not a SyntaxNode nor a SyntaxToken.");
-            }
+                { "Kind", kind }
+            };
+
             PropertyInfo[] properties = syntax.GetType().GetProperties();
             foreach (PropertyInfo info in properties)
             {
