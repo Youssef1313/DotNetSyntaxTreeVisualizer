@@ -37,7 +37,7 @@ export class Home extends Component {
             headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
             body: event.target.value
         };
-        fetch('SyntaxTree', requestOptions)
+        fetch('SyntaxTree/CSharp', requestOptions)
             .then(response => response.json())
             .then(data => this.setState({ treeJson: data }));
     }
