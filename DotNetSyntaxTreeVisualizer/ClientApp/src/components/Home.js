@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
 import Tree from 'react-d3-tree';
+import CodeMirror from '@uiw/react-codemirror';
+import 'codemirror/addon/display/autorefresh';
+import 'codemirror/addon/comment/comment';
+import 'codemirror/addon/edit/matchbrackets';
+import 'codemirror/keymap/sublime';
+import 'codemirror/theme/monokai.css';
+
+const code = 'const a = 0;';
 
 const containerStyles = {
     width: '100%',
@@ -45,6 +53,15 @@ export class Home extends Component {
     render() {
         return (
             <React.Fragment>
+                <CodeMirror
+                    value={code}
+                    options={{
+                        theme: 'monokai',
+                        tabSize: 2,
+                        keyMap: 'sublime',
+                        mode: 'jsx',
+                    }}
+                />
                 <textarea defaultValue={helloWorldCode} onChange={this.handleChanged} style={{ height: '230px', width: '100%' }} />
                 <div id="treeWrapper" style={containerStyles} ref={tc => (this.treeContainer = tc)}>
                     <Tree data={this.state.treeJson} orientation="vertical"
