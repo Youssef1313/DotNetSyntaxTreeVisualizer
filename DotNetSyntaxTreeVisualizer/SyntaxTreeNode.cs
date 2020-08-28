@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Microsoft.CodeAnalysis;
 
 namespace DotNetSyntaxTreeVisualizer
 {
@@ -18,6 +20,55 @@ namespace DotNetSyntaxTreeVisualizer
         public void AddChild(SyntaxTreeNode child)
         {
             Children.Add(child);
+        }
+
+        public static SyntaxTreeNode CreateMyOwnTree(SyntaxNodeOrToken nodeOrToken, SemanticModel model)
+        {
+            var root = new SyntaxTreeNode(GetSyntaxInformation(nodeOrToken, model));
+            foreach (SyntaxNodeOrToken child in nodeOrToken.ChildNodesAndTokens())
+            {
+                root.AddChild(CreateMyOwnTree(child, model));
+            }
+            return root;
+        }
+
+        private static IDictionary<string, string> GetSyntaxInformation(SyntaxNodeOrToken syntax, SemanticModel model)
+        {
+            Func<SyntaxNodeOrToken, Microsoft.CodeAnalysis.CSharp.SyntaxKind> csharpKind = Microsoft.CodeAnalysis.CSharp.CSharpExtensions.Kind;
+            Func<SyntaxNodeOrToken, Microsoft.CodeAnalysis.VisualBasic.SyntaxKind> vbKind = Microsoft.CodeAnalysis.VisualBasic.VisualBasicExtensions.Kind;
+            string kind =
+                syntax.Language == LanguageNames.CSharp
+                ? csharpKind(syntax).ToString()
+                : vbKind(syntax).ToString();
+
+            var result = new Dictionary<string, string>
+            {
+                { "Kind", kind },
+            };
+
+            IOperation operation = model.GetOperation(syntax.AsNode());
+            if (operation is object)
+            {
+                result.Add(nameof(IOperation), operation.Kind.ToString());
+            }
+
+            PropertyInfo[] properties = syntax.GetType().GetProperties();
+            foreach (PropertyInfo info in properties)
+            {
+                // Language isn't important to include in each node.
+                // Parent is redundant. I can already see the parent.
+                // ValueText and Value are the same as Text.
+                // SyntaxTree shows the complete source in each node. That's redundant.
+                // RawKind is just the underlying numeric value of SyntaxKind enum. It's meaningless.
+                if (info.Name == "Language" || info.Name == "Parent" ||
+                    info.Name == "ValueText" || info.Name == "Value" ||
+                    info.Name == "SyntaxTree" || info.Name == "RawKind")
+                {
+                    continue;
+                }
+                result.Add(info.Name, info.GetValue(syntax)?.ToString());
+            }
+            return result;
         }
 
         public override string ToString()
